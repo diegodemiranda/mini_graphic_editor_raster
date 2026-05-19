@@ -24,7 +24,7 @@ mini_paint/
     │   ├── circle.py          # Círculo — algoritmo do ponto médio (Bresenham)
     │   └── flood_fill.py      # Balde de tinta — BFS 4/8 conectado
     ├── renderer/
-    │   └── renderer.py        # Renderização pygame via surfarray
+    │   └── renderer.py        # Renderização OpenGL
     ├── app/
     │   └── app.py             # Loop principal, estado, eventos
     ├── ui/                    # (TODO — Requisito 3/4/5)
