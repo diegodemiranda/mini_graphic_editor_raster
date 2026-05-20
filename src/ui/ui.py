@@ -33,7 +33,7 @@ from OpenGL.GL import (
     GL_LINES,
 )
 from src.tools.tools import ToolType, TOOL_LABELS, BRUSH_SIZES, PALETTE
-from src.ui.font import draw_text, text_width
+from src.ui.font import draw_text, text_width, text_height
 
 # ── Constantes de layout ──────────────────────────────────────────────────────
 SIDEBAR_W = 240
@@ -126,7 +126,7 @@ def _swatch_rect(index: int):
 
 def active_color_rect():
     """Retângulo do indicador de cor ativa."""
-    return PAD, 510, SIDEBAR_W - 2 * PAD, 30
+    return PAD, 540, SIDEBAR_W - 2 * PAD, 30
 
 
 # ── Renderização da sidebar ───────────────────────────────────────────────────
@@ -146,9 +146,9 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
     _filled_rect(0, 0, SIDEBAR_W, 9999, 0.18, 0.18, 0.20)
 
     # ── Título ──
-    draw_text("MINI PAINT", PAD, 6, color=(0.9, 0.7, 0.2), scale=1)
+    draw_text("MINI PAINT", PAD, 6, color=(0.9, 0.7, 0.2), scale=2)
 
-    _hline(22, 0.35, 0.35, 0.35)
+    _hline(26, 0.35, 0.35, 0.35)
 
     # ── Botões de ferramenta ──
     size_names = list(BRUSH_SIZES.keys())
@@ -169,13 +169,13 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
         # Rótulo (texto bitmap)
         label = TOOL_LABELS[tool]
         tx = x + 4
-        ty = y + (h - 7) // 2
+        ty = y + (h - text_height(scale=2)) // 2
         txt_color = (1.0, 1.0, 1.0) if is_active else (0.75, 0.75, 0.75)
-        draw_text(label, tx, ty, color=txt_color, scale=1)
+        draw_text(label, tx, ty, color=txt_color, scale=2)
 
     # ── Seção Tamanho ──
     _hline(222, 0.35, 0.35, 0.35)
-    draw_text("TAMANHO", PAD, 228, color=(0.6, 0.6, 0.6), scale=1)
+    draw_text("TAMANHO", PAD, 228, color=(0.6, 0.6, 0.6), scale=2)
 
     for i, (name, px) in enumerate(BRUSH_SIZES.items()):
         x, y, w, h = _size_rect(i)
@@ -196,13 +196,13 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
         _border_rect(x, y, w, h, 0.35, 0.35, 0.38)
 
         label = f"{name} ({px}px)"
-        ty = y + (h - 7) // 2
+        ty = y + (h - text_height(scale=2)) // 2
         txt_color = (1.0, 1.0, 1.0) if is_active else (0.70, 0.70, 0.70)
-        draw_text(label, x + 4, ty, color=txt_color, scale=1)
+        draw_text(label, x + 4, ty, color=txt_color, scale=2)
 
     # ── Seção Cores ──
     _hline(330, 0.35, 0.35, 0.35)
-    draw_text("CORES", PAD, 337, color=(0.6, 0.6, 0.6), scale=1)
+    draw_text("CORES", PAD, 337, color=(0.6, 0.6, 0.6), scale=2)
 
     for i, (name, rgb) in enumerate(_PALETTE):
         x, y, w, h = _swatch_rect(i)
@@ -216,8 +216,8 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
             _border_rect(x, y, w, h, 0.4, 0.4, 0.4)
 
     # ── Cor ativa ──
-    _hline(500, 0.35, 0.35, 0.35)
-    draw_text("COR ATIVA", PAD, 503, color=(0.6, 0.6, 0.6), scale=1)
+    _hline(530, 0.35, 0.35, 0.35)
+    draw_text("COR ATIVA", PAD, 516, color=(0.6, 0.6, 0.6), scale=2)
 
     ax, ay, aw, ah = active_color_rect()
     r, g, b = active_color[0] / 255, active_color[1] / 255, active_color[2] / 255
