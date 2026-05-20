@@ -14,7 +14,7 @@ Layout (largura = SIDEBAR_W = 240 px, altura = janela inteira)
   y 440 – 480 : retângulo de cor ativa + rótulo
 
 Todo desenho usa primitivas OpenGL imediatas (GL_QUADS, GL_LINES,
-GL_POINTS para texto via font.py).  Nenhuma biblioteca de UI externa.
+GL_POINTS para texto via font.py).
 
 Regiões clicáveis
 -----------------
@@ -225,7 +225,7 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
     _border_rect(ax, ay, aw, ah, 0.5, 0.5, 0.5)
 
 
-# ── Hit-test: o que foi clicado na sidebar? ───────────────────────────────────
+# ── Hit-test: o que foi clicado na sidebar ───────────────────────────────────
 
 
 def hit_test(mx: float, my: float):
