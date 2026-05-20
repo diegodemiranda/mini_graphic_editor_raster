@@ -79,7 +79,10 @@ class App:
         self.canvas = Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, BG_COLOR)
 
         # ── View ───────────────────────────────────────────────────────────────
-        self.renderer = Renderer(WIN_W, WIN_H)
+        # Use o tamanho do framebuffer (em pixels) — em displays HiDPI
+        # o framebuffer pode ser maior que o tamanho da janela (retina).
+        fb_w, fb_h = glfw.get_framebuffer_size(window)
+        self.renderer = Renderer(fb_w, fb_h)
         self.renderer.setup_projection()
 
         # ── Estado do Controller ───────────────────────────────────────────────
@@ -278,11 +281,20 @@ class App:
         elif key == glfw.KEY_3:
             self.brush_size = 11
 
-        # Cores via teclado numérico (KP_0 … KP_7)
-        elif glfw.KEY_KP_0 <= key <= glfw.KEY_KP_7:
-            idx = key - glfw.KEY_KP_0
-            if idx < len(PALETTE):
-                self.current_color = PALETTE[idx][1]
+        # Cores via setas do teclado: Left/Up = anterior, Right/Down = próximo
+        elif key in (glfw.KEY_LEFT, glfw.KEY_RIGHT, glfw.KEY_UP, glfw.KEY_DOWN):
+            # Encontra índice atual na paleta (por cor). Se não achar, assume 0.
+            try:
+                cur_idx = next(i for i, p in enumerate(PALETTE) if p[1] == self.current_color)
+            except StopIteration:
+                cur_idx = 0
+
+            if key in (glfw.KEY_RIGHT, glfw.KEY_DOWN):
+                cur_idx = (cur_idx + 1) % len(PALETTE)
+            else:
+                cur_idx = (cur_idx - 1) % len(PALETTE)
+
+            self.current_color = PALETTE[cur_idx][1]
 
         # Limpar canvas
         elif key == glfw.KEY_DELETE or key == glfw.KEY_N:
