@@ -79,10 +79,11 @@ class App:
         self.canvas = Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, BG_COLOR)
 
         # ── View ───────────────────────────────────────────────────────────────
-        # Use o tamanho do framebuffer (em pixels) — em displays HiDPI
-        # o framebuffer pode ser maior que o tamanho da janela (retina).
+        # O cursor do GLFW usa coordenadas de janela lógicas, mas o viewport
+        # deve usar o tamanho do framebuffer em displays HiDPI.
+        win_w, win_h = glfw.get_window_size(window)
         fb_w, fb_h = glfw.get_framebuffer_size(window)
-        self.renderer = Renderer(fb_w, fb_h)
+        self.renderer = Renderer(win_w, win_h, fb_w, fb_h)
         self.renderer.setup_projection()
 
         # ── Estado do Controller ───────────────────────────────────────────────
@@ -98,7 +99,8 @@ class App:
         glfw.set_mouse_button_callback(window, self._on_mouse_button)
         glfw.set_cursor_pos_callback(window, self._on_cursor_pos)
         glfw.set_key_callback(window, self._on_key)
-        glfw.set_framebuffer_size_callback(window, self._on_resize)
+        glfw.set_window_size_callback(window, self._on_window_resize)
+        glfw.set_framebuffer_size_callback(window, self._on_framebuffer_resize)
 
     # ── Loop principal ─────────────────────────────────────────────────────────
 
@@ -306,9 +308,14 @@ class App:
 
     # ── Resize ────────────────────────────────────────────────────────────────
 
-    def _on_resize(self, window, width, height) -> None:
+    def _on_window_resize(self, window, width, height) -> None:
         self.renderer.win_w = width
         self.renderer.win_h = height
+        self.renderer.setup_projection()
+
+    def _on_framebuffer_resize(self, window, width, height) -> None:
+        self.renderer.fb_w = width
+        self.renderer.fb_h = height
         self.renderer.setup_projection()
 
     # ── Utilitário ─────────────────────────────────────────────────────────────
