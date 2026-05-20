@@ -68,13 +68,16 @@ class Renderer:
 
     Atributos
     ----------
-    win_w, win_h : int  — dimensões totais da janela (sidebar + canvas)
+    win_w, win_h : int  — dimensões lógicas da janela (sidebar + canvas)
+    fb_w, fb_h   : int  — dimensões físicas do framebuffer (HiDPI)
     texture_id   : int  — ID da textura OpenGL
     """
 
-    def __init__(self, win_w: int, win_h: int) -> None:
+    def __init__(self, win_w: int, win_h: int, fb_w: int, fb_h: int) -> None:
         self.win_w = win_w
         self.win_h = win_h
+        self.fb_w = fb_w
+        self.fb_h = fb_h
         self._tex_initialized = False
         self.texture_id = self._create_texture()
 
@@ -82,11 +85,11 @@ class Renderer:
 
     def setup_projection(self) -> None:
         """
-        Configura projeção ortográfica em coordenadas de janela (pixels).
-        y=0 no topo, y=win_h na base — compatível com as coordenadas GLFW.
-        Chamado uma vez na inicialização e sempre que a janela for redimensionada.
+        Configura projeção ortográfica em coordenadas de janela lógicas.
+        Usa o tamanho físico do framebuffer para o viewport, mantendo
+        coordenadas de entrada do mouse em unidades lógicas.
         """
-        glViewport(0, 0, self.win_w, self.win_h)
+        glViewport(0, 0, self.fb_w, self.fb_h)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         # left, right, bottom, top, near, far
@@ -170,13 +173,13 @@ class Renderer:
         glColor3f(1.0, 1.0, 1.0)  # sem tinte
 
         glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 0.0)
-        glVertex2f(x0, y0)  # topo-esquerdo
-        glTexCoord2f(1.0, 0.0)
-        glVertex2f(x1, y0)  # topo-direito
-        glTexCoord2f(1.0, 1.0)
-        glVertex2f(x1, y1)  # base-direito
         glTexCoord2f(0.0, 1.0)
+        glVertex2f(x0, y0)  # topo-esquerdo
+        glTexCoord2f(1.0, 1.0)
+        glVertex2f(x1, y0)  # topo-direito
+        glTexCoord2f(1.0, 0.0)
+        glVertex2f(x1, y1)  # base-direito
+        glTexCoord2f(0.0, 0.0)
         glVertex2f(x0, y1)  # base-esquerdo
         glEnd()
 
