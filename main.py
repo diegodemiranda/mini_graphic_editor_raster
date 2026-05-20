@@ -25,7 +25,10 @@ from OpenGL.GL import glEnable, GL_POINT_SMOOTH, GL_LINE_SMOOTH
 
 from src.canvas.canvas import CANVAS_WIDTH, CANVAS_HEIGHT
 from src.renderer.renderer import SIDEBAR_W
-from src.app.app import App, WIN_W, WIN_H
+from src.app.app import App
+
+WIN_W = SIDEBAR_W + CANVAS_WIDTH   # 150 + 800 = 950
+WIN_H = CANVAS_HEIGHT              # 600
 
 
 def init_glfw() -> object:
@@ -45,7 +48,7 @@ def init_glfw() -> object:
     # ── Hints de contexto OpenGL ──────────────────────────────────────────────
     glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 2)
     glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 1)
-    glfw.window_hint(glfw.RESIZABLE, glfw.FALSE)  # canvas de tamanho fixo
+    glfw.window_hint(glfw.RESIZABLE, glfw.FALSE)   # canvas de tamanho fixo
 
     window = glfw.create_window(WIN_W, WIN_H, "Mini Paint", None, None)
     if not window:
@@ -54,7 +57,7 @@ def init_glfw() -> object:
         sys.exit(1)
 
     glfw.make_context_current(window)
-    glfw.swap_interval(1)  # VSync: limita ao refresh rate do monitor
+    glfw.swap_interval(1)    # VSync: limita ao refresh rate do monitor
 
     # Suavização de pontos e linhas (melhora a aparência da fonte bitmap)
     glEnable(GL_POINT_SMOOTH)
@@ -82,8 +85,8 @@ def main() -> None:
     print()
 
     window = init_glfw()
-    app = App(window)  # Controller — registra callbacks e monta Model/View
-    app.run()  # loop principal até a janela ser fechada
+    app    = App(window)   # Controller — registra callbacks e monta Model/View
+    app.run()              # loop principal até a janela ser fechada
 
 
 if __name__ == "__main__":
