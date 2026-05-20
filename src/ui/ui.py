@@ -3,7 +3,7 @@ src/ui/ui.py  ·  CAMADA VIEW
 ==============================
 Renderização da sidebar (painel lateral esquerdo) via OpenGL imediato.
 
-Layout (largura = SIDEBAR_W = 150 px, altura = janela inteira)
+Layout (largura = SIDEBAR_W = 240 px, altura = janela inteira)
 --------------------------------------------------------------
   y   0 –  20 : título "MINI PAINT"
   y  25 – 205 : 8 botões de ferramenta  (22 px cada)
@@ -36,7 +36,7 @@ from src.tools.tools import ToolType, TOOL_LABELS, BRUSH_SIZES, PALETTE
 from src.ui.font import draw_text, text_width
 
 # ── Constantes de layout ──────────────────────────────────────────────────────
-SIDEBAR_W = 150
+SIDEBAR_W = 240
 PAD = 8  # margem interna
 BTN_H = 22  # altura dos botões de ferramenta
 SIZE_H = 20  # altura dos botões de espessura

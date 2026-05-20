@@ -59,7 +59,7 @@ from OpenGL.GL import (
 from src.canvas.canvas import Canvas
 
 # ── Largura da sidebar (área não-canvas à esquerda) ───────────────────────────
-SIDEBAR_W = 150
+SIDEBAR_W = 240
 
 
 class Renderer:
