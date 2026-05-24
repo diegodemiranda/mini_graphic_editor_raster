@@ -44,10 +44,8 @@ mini_graphic_editor_raster/
     ├── ui/
     │   ├── ui.py              # Sidebar e elementos de UI
     │   └── font.py            # Fonte bitmap utilizada no UI
-    ├── io/                    # (TODO) salvar e carregar
+    ├── io/                    # salvar e carregar
     │   └── io_handler.py
-    └── transforms/            # (TODO) transformações geométricas
-        └── transforms.py
 ```
  
 ---
