@@ -55,6 +55,7 @@ from src.tools.line import draw_line
 from src.tools.rectangle import draw_rect_hollow, draw_rect_filled
 from src.tools.circle import draw_circle_hollow, draw_circle_filled
 from src.tools.flood_fill import flood_fill_4
+from src.io.io_handler import save_canvas
 
 # ── Constantes ────────────────────────────────────────────────────────────────
 BG_COLOR = (255, 255, 255)
@@ -146,6 +147,11 @@ class App:
                         self.brush_size = value
                     elif kind == "color":
                         self.current_color = value
+                    elif kind == "action":
+                        if value == "new":
+                            self.canvas.clear()
+                        elif value == "save":
+                            save_canvas(self.canvas, "desenho.mpr")
                 return  # não inicia traço no canvas
 
             # ── Clique no canvas ──
@@ -301,6 +307,10 @@ class App:
         # Limpar canvas
         elif key == glfw.KEY_DELETE or key == glfw.KEY_N:
             self.canvas.clear()
+
+        # Salvar canvas
+        elif key == glfw.KEY_S:
+            save_canvas(self.canvas, "desenho.mpr")
 
         # Fechar
         elif key == glfw.KEY_ESCAPE:
