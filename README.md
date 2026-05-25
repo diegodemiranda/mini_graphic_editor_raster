@@ -9,11 +9,11 @@ manuais de rasterização e interface OpenGL.
  
 O editor já implementa as ferramentas básicas de desenho, o framebuffer em
 `src/canvas/canvas.py`, o renderizador OpenGL em `src/renderer/renderer.py`,
-o controlador em `src/app/app.py` e a interface da sidebar em `src/ui/ui.py`.
+o controlador em `src/app/app.py`, a interface da sidebar em `src/ui/ui.py`
+e salvamento/carregamento de arquivos `.mpr` em `src/io/io_handler.py`.
 
-As seguintes pastas ainda são pendentes de implementação:
+A seguinte pasta ainda é pendente de implementação:
 
-- `src/io/` — salvar e carregar arquivos não implementados ainda.
 - `src/transforms/` — transformações geométricas de imagem ainda não estão
   implementadas.
  
@@ -44,8 +44,10 @@ mini_graphic_editor_raster/
     ├── ui/
     │   ├── ui.py              # Sidebar e elementos de UI
     │   └── font.py            # Fonte bitmap utilizada no UI
-    ├── io/                    # salvar e carregar
+    ├── io/                    # Salvar e carregar arquivos .mpr
     │   └── io_handler.py
+    └── transforms/            # (TODO) transformações geométricas
+        └── transforms.py
 ```
  
 ---
@@ -83,6 +85,15 @@ python main.py
 | `3`                | Espessura grossa (11 px)            |
 | `← / ↑ / → / ↓`    | Selecionar cor anterior/próxima      |
 | `N` / `Delete`     | Limpar canvas                       |
+| `S`                | Salvar canvas em `desenho.mpr`      |
+| `O`                | Carregar canvas de `desenho.mpr`    |
 | `Esc`              | Sair                                |
  
 ---
+
+## Formato `.mpr`
+
+O projeto usa um formato binário próprio para salvar imagens raster. O arquivo
+começa com um cabeçalho simples contendo identificador, largura, altura e número
+de canais RGB. Depois do cabeçalho, vêm os bytes dos pixels em ordem linha por
+linha.

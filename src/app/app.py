@@ -55,12 +55,13 @@ from src.tools.line import draw_line
 from src.tools.rectangle import draw_rect_hollow, draw_rect_filled
 from src.tools.circle import draw_circle_hollow, draw_circle_filled
 from src.tools.flood_fill import flood_fill_4
-from src.io.io_handler import save_canvas
+from src.io.io_handler import load_canvas, save_canvas
 
 # ── Constantes ────────────────────────────────────────────────────────────────
 BG_COLOR = (255, 255, 255)
 DEFAULT_COLOR = (0, 0, 0)
 DEFAULT_SIZE = 1
+DEFAULT_FILE = "desenho.mpr"
 WIN_W = SIDEBAR_W + CANVAS_WIDTH
 WIN_H = CANVAS_HEIGHT
 
@@ -151,7 +152,9 @@ class App:
                         if value == "new":
                             self.canvas.clear()
                         elif value == "save":
-                            save_canvas(self.canvas, "desenho.mpr")
+                            save_canvas(self.canvas, DEFAULT_FILE)
+                        elif value == "load":
+                            load_canvas(self.canvas, DEFAULT_FILE)
                 return  # não inicia traço no canvas
 
             # ── Clique no canvas ──
@@ -310,7 +313,11 @@ class App:
 
         # Salvar canvas
         elif key == glfw.KEY_S:
-            save_canvas(self.canvas, "desenho.mpr")
+            save_canvas(self.canvas, DEFAULT_FILE)
+
+        # Carregar canvas
+        elif key == glfw.KEY_O:
+            load_canvas(self.canvas, DEFAULT_FILE)
 
         # Fechar
         elif key == glfw.KEY_ESCAPE:
