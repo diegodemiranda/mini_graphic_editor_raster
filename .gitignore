@@ -2,7 +2,6 @@
 __pycache__/
 *.py[codz]
 *$py.class
-DS_Store
 # C extensions
 *.so
 .vscode
@@ -217,3 +216,4 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.DS_Store
