@@ -38,6 +38,7 @@ from src.ui.font import draw_text, text_width, text_height
 # ── Constantes de layout ──────────────────────────────────────────────────────
 SIDEBAR_W = 240
 PAD = 8  # margem interna
+ACTION_H = 22  # altura dos botoes de acao
 BTN_H = 22  # altura dos botões de ferramenta
 SIZE_H = 20  # altura dos botões de espessura
 SWATCH = 34  # tamanho dos swatches de cor (px)
@@ -102,15 +103,24 @@ def _hline(y: float, r: float, g: float, b: float) -> None:
 def _tool_rect(index: int):
     """Retorna (x, y, w, h) do botão da ferramenta `index`."""
     x = PAD
-    y = 26 + index * (BTN_H + 2)
+    y = 64 + index * (BTN_H + 2)
     w = SIDEBAR_W - 2 * PAD
     return x, y, w, BTN_H
+
+
+def _action_rect(index: int):
+    """Retorna (x, y, w, h) dos botoes de acao lado a lado."""
+    gap = 4
+    w = (SIDEBAR_W - 2 * PAD - 2 * gap) / 3
+    x = PAD + index * (w + gap)
+    y = 34
+    return x, y, w, ACTION_H
 
 
 def _size_rect(index: int):
     """Retorna (x, y, w, h) do botão de espessura `index`."""
     x = PAD
-    y = 250 + index * (SIZE_H + 4)
+    y = 290 + index * (SIZE_H + 4)
     w = SIDEBAR_W - 2 * PAD
     return x, y, w, SIZE_H
 
@@ -120,13 +130,13 @@ def _swatch_rect(index: int):
     col = index % 2
     row = index // 2
     x = PAD + col * (SWATCH + 4)
-    y = 360 + row * (SWATCH + 4)
+    y = 395 + row * (SWATCH + 4)
     return x, y, SWATCH, SWATCH
 
 
 def active_color_rect():
     """Retângulo do indicador de cor ativa."""
-    return PAD, 540, SIDEBAR_W - 2 * PAD, 30
+    return PAD, 570, SIDEBAR_W - 2 * PAD, 24
 
 
 # ── Renderização da sidebar ───────────────────────────────────────────────────
@@ -149,6 +159,21 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
     draw_text("MINI PAINT", PAD, 6, color=(0.9, 0.7, 0.2), scale=2)
 
     _hline(26, 0.35, 0.35, 0.35)
+
+    # ── Botões de ação ──
+    action_labels = ["NOVO", "SALVAR", "CARREGAR"]
+
+    for i, label in enumerate(action_labels):
+        x, y, w, h = _action_rect(i)
+
+        _filled_rect(x, y, w, h, 0.25, 0.25, 0.27)
+        _border_rect(x, y, w, h, 0.35, 0.35, 0.38)
+
+        tx = x + (w - text_width(label, scale=1)) // 2
+        ty = y + (h - text_height(scale=1)) // 2
+        draw_text(label, tx, ty, color=(0.85, 0.85, 0.85), scale=1)
+
+    _hline(58, 0.35, 0.35, 0.35)
 
     # ── Botões de ferramenta ──
     size_names = list(BRUSH_SIZES.keys())
@@ -174,8 +199,8 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
         draw_text(label, tx, ty, color=txt_color, scale=2)
 
     # ── Seção Tamanho ──
-    _hline(222, 0.35, 0.35, 0.35)
-    draw_text("TAMANHO", PAD, 228, color=(0.6, 0.6, 0.6), scale=2)
+    _hline(262, 0.35, 0.35, 0.35)
+    draw_text("TAMANHO", PAD, 268, color=(0.6, 0.6, 0.6), scale=2)
 
     for i, (name, px) in enumerate(BRUSH_SIZES.items()):
         x, y, w, h = _size_rect(i)
@@ -201,8 +226,8 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
         draw_text(label, x + 4, ty, color=txt_color, scale=2)
 
     # ── Seção Cores ──
-    _hline(330, 0.35, 0.35, 0.35)
-    draw_text("CORES", PAD, 337, color=(0.6, 0.6, 0.6), scale=2)
+    _hline(366, 0.35, 0.35, 0.35)
+    draw_text("CORES", PAD, 373, color=(0.6, 0.6, 0.6), scale=2)
 
     for i, (name, rgb) in enumerate(_PALETTE):
         x, y, w, h = _swatch_rect(i)
@@ -216,8 +241,8 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
             _border_rect(x, y, w, h, 0.4, 0.4, 0.4)
 
     # ── Cor ativa ──
-    _hline(530, 0.35, 0.35, 0.35)
-    draw_text("COR ATIVA", PAD, 516, color=(0.6, 0.6, 0.6), scale=2)
+    _hline(552, 0.35, 0.35, 0.35)
+    draw_text("COR ATIVA", PAD, 556, color=(0.6, 0.6, 0.6), scale=2)
 
     ax, ay, aw, ah = active_color_rect()
     r, g, b = active_color[0] / 255, active_color[1] / 255, active_color[2] / 255
@@ -241,6 +266,14 @@ def hit_test(mx: float, my: float):
     """
     if mx < 0 or mx >= SIDEBAR_W:
         return None
+
+    # Botoes de acao
+    actions = ["new", "save", "load"]
+
+    for i, action in enumerate(actions):
+        x, y, w, h = _action_rect(i)
+        if x <= mx < x + w and y <= my < y + h:
+            return ("action", action)
 
     # Ferramentas
     for i, tool in enumerate(_TOOLS):
