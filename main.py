@@ -13,8 +13,7 @@ backend de janelamento sem tocar na lógica de negócio.
 
 Configuração da janela OpenGL
 ------------------------------
-• Versão: OpenGL 2.1 (compatibilidade — usa modo imediato para manter o
-  código didático sem shaders).
+• Versão: OpenGL 2.1 
 • Tamanho fixo: (SIDEBAR_W + CANVAS_WIDTH) × CANVAS_HEIGHT = 950 × 600.
 • VSync habilitado (swap_interval=1) para evitar tearing e limitar CPU.
 """
