@@ -109,9 +109,9 @@ def _tool_rect(index: int):
 
 
 def _action_rect(index: int):
-    """Retorna (x, y, w, h) dos botoes NOVO e SALVAR lado a lado."""
+    """Retorna (x, y, w, h) dos botoes de acao lado a lado."""
     gap = 4
-    w = (SIDEBAR_W - 2 * PAD - gap) / 2
+    w = (SIDEBAR_W - 2 * PAD - 2 * gap) / 3
     x = PAD + index * (w + gap)
     y = 34
     return x, y, w, ACTION_H
@@ -161,7 +161,7 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
     _hline(26, 0.35, 0.35, 0.35)
 
     # ── Botões de ação ──
-    action_labels = ["NOVO", "SALVAR"]
+    action_labels = ["NOVO", "SALVAR", "CARREGAR"]
 
     for i, label in enumerate(action_labels):
         x, y, w, h = _action_rect(i)
@@ -169,8 +169,9 @@ def draw_sidebar(active_tool: ToolType, active_size: int, active_color: tuple) -
         _filled_rect(x, y, w, h, 0.25, 0.25, 0.27)
         _border_rect(x, y, w, h, 0.35, 0.35, 0.38)
 
-        ty = y + (h - text_height(scale=2)) // 2
-        draw_text(label, x + 4, ty, color=(0.85, 0.85, 0.85), scale=2)
+        tx = x + (w - text_width(label, scale=1)) // 2
+        ty = y + (h - text_height(scale=1)) // 2
+        draw_text(label, tx, ty, color=(0.85, 0.85, 0.85), scale=1)
 
     _hline(58, 0.35, 0.35, 0.35)
 
@@ -267,7 +268,7 @@ def hit_test(mx: float, my: float):
         return None
 
     # Botoes de acao
-    actions = ["new", "save"]
+    actions = ["new", "save", "load"]
 
     for i, action in enumerate(actions):
         x, y, w, h = _action_rect(i)
